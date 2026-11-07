@@ -1,135 +1,116 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="車の購入から売却までの実質コストを無料で計算できるツールです。">
-<title>車の実質コスト計算機</title>
+<meta name="description" content="車の購入価格・売却予想価格・維持費から、月々と1kmあたりの実質コストを無料でシミュレーション。">
+<meta name="theme-color" content="#142b4a">
+<title>車の実質コスト計算機｜購入・維持・売却費用を見える化</title>
 <style>
+:root{color-scheme:light;--navy:#142b4a;--blue:#1768d1;--ink:#202b3c;--muted:#687589;--line:#e1e6ed}
 *{box-sizing:border-box}
-body{margin:0;background:#f4f6f8;color:#202b3c;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
-header{background:#172b4d;color:white;padding:28px 20px;text-align:center}
-header h1{font-size:23px;margin:0 0 9px}
-header p{font-size:13px;color:#d5deed;margin:0}
-main{max-width:620px;margin:22px auto;padding:0 15px}
-.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 2px 12px #0000000a}
-h2{font-size:17px;margin:0 0 18px}
-label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
-input{width:100%;padding:13px;border:1px solid #d7dce3;border-radius:8px;font-size:16px;background:#fff}
-.unit{font-size:11px;color:#778195;font-weight:400}
-button{width:100%;padding:16px;border:0;border-radius:9px;background:#1768d1;color:white;font-size:17px;font-weight:bold;margin-top:18px}
-.result{background:#172b4d;color:white}
-.result h2{color:white}
-.big{font-size:34px;font-weight:800;margin:8px 0}
-.result p{color:#d5deed;font-size:13px}
-.line{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ffffff30;font-size:14px}
+body{margin:0;background:#f3f6fa;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+header{background:linear-gradient(135deg,#142b4a,#244d78);color:#fff;padding:30px 18px;text-align:center}
+header h1{font-size:clamp(22px,5vw,30px);margin:0 0 9px}
+header p{font-size:14px;color:#dce7f5;margin:0}
+main{max-width:720px;margin:22px auto;padding:0 14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:15px;box-shadow:0 4px 18px #172b4d0a}
+h2{font-size:17px;margin:0 0 15px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}
+input{width:100%;padding:13px;border:1px solid #cfd7e2;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}
+input:focus{outline:2px solid #8bbcff;border-color:var(--blue)}
+.unit{font-size:11px;color:var(--muted);font-weight:400}
+.actions{display:flex;gap:10px;margin-top:18px}
+button{flex:1;padding:14px 10px;border:0;border-radius:9px;background:var(--blue);color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+button.secondary{background:#eaf0f7;color:#23415f}
+.result{background:var(--navy);color:#fff}
+.result h2{color:#fff}
+.result .eyebrow{font-size:13px;color:#dce7f5;margin:0}
+.big{font-size:clamp(30px,8vw,40px);font-weight:800;margin:5px 0 16px;letter-spacing:-1px}
+.line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #ffffff30;font-size:14px}
 .line strong{text-align:right}
-.note{font-size:12px;color:#778195;line-height:1.7}
+.result .sub{font-size:12px;color:#dce7f5;line-height:1.7;margin:14px 0 0}
+.error{display:none;color:#b42318;background:#fff1f0;border-radius:8px;padding:10px;font-size:13px;margin-top:12px}
+.note{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
 footer{text-align:center;color:#87909e;font-size:11px;padding:20px}
+@media(max-width:520px){.fields{grid-template-columns:1fr}.card{padding:17px}.actions{flex-direction:column}}
 </style>
 </head>
 <body>
 <header>
 <h1>車の実質コスト計算機</h1>
-<p>車にかかる本当の費用を見える化</p>
+<p>買うとき・乗っている間・売るときの費用を見える化</p>
 </header>
-
 <main>
-<div class="card">
+<section class="card">
 <h2>① 車両の購入・売却</h2>
-<label>購入価格（円）</label>
-<input id="buy" type="number" value="2500000" min="0">
-<label>売却予想価格（円）</label>
-<input id="sell" type="number" value="1500000" min="0">
-<label>保有予定年数</label>
-<input id="years" type="number" value="5" min="1" max="50">
+<div class="fields">
+<div><label for="buy">購入価格 <span class="unit">円</span></label><input id="buy" type="number" inputmode="numeric" value="2500000" min="0"></div>
+<div><label for="sell">売却予想価格 <span class="unit">円</span></label><input id="sell" type="number" inputmode="numeric" value="1500000" min="0"></div>
+<div><label for="initial">購入時の諸費用 <span class="unit">円</span></label><input id="initial" type="number" inputmode="numeric" value="150000" min="0"></div>
+<div><label for="years">保有予定年数 <span class="unit">年</span></label><input id="years" type="number" inputmode="numeric" value="5" min="1" max="50"></div>
 </div>
-
-<div class="card">
-<h2>② 維持費</h2>
-<label>年間走行距離（km）</label>
-<input id="distance" type="number" value="10000" min="0">
-<label>年間の税金・保険料（円）</label>
-<input id="insurance" type="number" value="100000" min="0">
-<label>年間の車検・整備費用（円）</label>
-<input id="maintenance" type="number" value="100000" min="0">
-<label>実燃費（km/L）</label>
-<input id="efficiency" type="number" value="12" min="0.1" step="0.1">
-<label>ガソリン単価（円/L）</label>
-<input id="fuel" type="number" value="175" min="0">
-<label>月極駐車場代（円/月）</label>
-<input id="parking" type="number" value="10000" min="0">
-<button onclick="calculate()">実質コストを計算する</button>
+</section>
+<section class="card">
+<h2>② 年間の維持費</h2>
+<div class="fields">
+<div><label for="distance">年間走行距離 <span class="unit">km</span></label><input id="distance" type="number" inputmode="numeric" value="10000" min="0"></div>
+<div><label for="insurance">年間の税金・保険料 <span class="unit">円</span></label><input id="insurance" type="number" inputmode="numeric" value="100000" min="0"></div>
+<div><label for="maintenance">年間の車検・整備費用 <span class="unit">円</span></label><input id="maintenance" type="number" inputmode="numeric" value="100000" min="0"></div>
+<div><label for="efficiency">実燃費 <span class="unit">km/L</span></label><input id="efficiency" type="number" inputmode="decimal" value="12" min="0.1" step="0.1"></div>
+<div><label for="fuel">ガソリン単価 <span class="unit">円/L</span></label><input id="fuel" type="number" inputmode="numeric" value="175" min="0"></div>
+<div><label for="parking">月極駐車場代 <span class="unit">円/月</span></label><input id="parking" type="number" inputmode="numeric" value="10000" min="0"></div>
 </div>
-
-<div class="card result" id="result" aria-live="polite">
+<div id="error" class="error" role="alert">入力内容を確認してください。マイナスの数値や、0年・0km/Lは入力できません。</div>
+<div class="actions">
+<button type="button" id="calc">実質コストを計算する</button>
+<button type="button" class="secondary" id="reset">初期値に戻す</button>
+</div>
+</section>
+<section class="card result" id="result" aria-live="polite">
 <h2>③ あなたの車の実質コスト</h2>
-<p>月々の実質負担額（概算）</p>
+<p class="eyebrow">月々の実質負担額（概算）</p>
 <div class="big" id="monthly">---</div>
 <div class="line"><span>保有期間中の総コスト</span><strong id="total">---</strong></div>
 <div class="line"><span>車両の値下がり分（月額）</span><strong id="depreciation">---</strong></div>
+<div class="line"><span>燃料代（月額）</span><strong id="fuelMonthly">---</strong></div>
 <div class="line"><span>1kmあたりのコスト</span><strong id="perkm">---</strong></div>
-<p>※ローン金利、購入諸費用、修理の臨時出費などは含まない概算です。</p>
-</div>
-
-<div class="card">
-<h2>この計算について</h2>
-<p class="note">
-購入価格と売却予想価格の差額に、税金・保険・整備・燃料・駐車場などの維持費を加えて計算します。実際の費用は車種、使用状況、保険内容などによって変わります。入力内容は外部に送信しません。
-</p>
-</div>
+<p class="sub">購入価格と売却予想価格の差額、購入諸費用、税金・保険・整備・燃料・駐車場代を合算した概算です。ローン金利、修理の臨時出費、売却時の手数料などは含みません。</p>
+</section>
+<section class="card">
+<h2>計算について</h2>
+<p class="note">入力した数値はこのページ内で計算するだけで、外部に送信しません。実際の費用は車種、走行状況、保険内容、地域などによって異なります。購入・売却の判断を保証するものではありません。</p>
+</section>
 </main>
-
 <footer>車の実質コスト計算機 | 無料・登録不要</footer>
-
 <script>
-function yen(n){
- return Math.round(n).toLocaleString("ja-JP")+"円";
-}
-function val(id){
- return Number(document.getElementById(id).value);
-}
+const defaults={buy:2500000,sell:1500000,initial:150000,years:5,distance:10000,insurance:100000,maintenance:100000,efficiency:12,fuel:175,parking:10000};
+const ids=Object.keys(defaults);
+const yen=n=>Math.round(n).toLocaleString("ja-JP")+"円";
+const val=id=>Number(document.getElementById(id).value);
 function calculate(){
- const buy=val("buy");
- const sell=val("sell");
- const years=val("years");
- const distance=val("distance");
- const insurance=val("insurance");
- const maintenance=val("maintenance");
- const efficiency=val("efficiency");
- const fuel=val("fuel");
- const parking=val("parking");
-
- if(years<=0 || efficiency<=0 || distance<0 ||
- buy<0 || sell<0 || insurance<0 ||
- maintenance<0 || fuel<0 || parking<0){
-  alert("入力内容を確認してください。");
-  return;
- }
-
- const months=years*12;
- const depreciation=Math.max(0,buy-sell);
- const annualFuel=distance/efficiency*fuel;
- const monthlyCost=
-  depreciation/months+
-  (insurance+maintenance+annualFuel)/12+
-  parking;
- const totalCost=
-  depreciation+
-  (insurance+maintenance+annualFuel)*years+
-  parking*months;
- const perKm=distance>0?monthlyCost/(distance/12):0;
-
- document.getElementById("monthly").textContent=yen(monthlyCost)+"/月";
- document.getElementById("total").textContent=yen(totalCost);
- document.getElementById("depreciation").textContent=yen(depreciation/months);
- document.getElementById("perkm").textContent=
-  distance>0?perKm.toFixed(1)+"円/km":"走行距離を入力してください";
- document.getElementById("result").scrollIntoView({behavior:"smooth"});
+ const v=Object.fromEntries(ids.map(id=>[id,val(id)]));
+ const invalid=ids.some(id=>!Number.isFinite(v[id])||v[id]<0) || v.years<=0 || v.efficiency<=0;
+ document.getElementById("error").style.display=invalid?"block":"none";
+ if(invalid)return;
+ const months=v.years*12;
+ const depreciation=Math.max(0,v.buy-v.sell);
+ const annualFuel=v.distance/v.efficiency*v.fuel;
+ const monthlyDep=(depreciation+v.initial)/months;
+ const monthlyFuel=annualFuel/12;
+ const monthly=monthlyDep+(v.insurance+v.maintenance)/12+monthlyFuel+v.parking;
+ const total=depreciation+v.initial+(v.insurance+v.maintenance+annualFuel)*v.years+v.parking*months;
+ document.getElementById("monthly").textContent=yen(monthly)+"/月";
+ document.getElementById("total").textContent=yen(total);
+ document.getElementById("depreciation").textContent=yen(monthlyDep);
+ document.getElementById("fuelMonthly").textContent=yen(monthlyFuel);
+ document.getElementById("perkm").textContent=v.distance>0?(monthly/(v.distance/12)).toFixed(1)+"円/km":"走行距離を入力してください";
 }
+document.getElementById("calc").addEventListener("click",calculate);
+document.getElementById("reset").addEventListener("click",()=>{ids.forEach(id=>document.getElementById(id).value=defaults[id]);calculate();});
+ids.forEach(id=>document.getElementById(id).addEventListener("input",calculate));
 calculate();
 </script>
 </body>
 </html>
-<!-- GitHub Pages update -->
