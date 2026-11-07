@@ -33,7 +33,7 @@ footer{text-align:center;color:#87909e;font-size:11px;padding:20px}footer a{colo
 <h2>車の条件を入力</h2>
 <p class="intro">分かる範囲で入力して「実質コストを計算する」を押してください。金額は概算です。</p>
 <div class="grid">
-<div class="field"><label for="maker">メーカー</label><select id="maker"><option value="">メーカーを選択（任意）</option><option>トヨタ</option><option>ホンダ</option><option>日産</option><option>スズキ</option><option>ダイハツ</option><option>マツダ</option><option>スバル</option><option>三菱</option><option>レクサス</option></select><div class="unit">メーカーを選ぶと車種を選択できます</div></div>
+<div class="field"><label for="maker">メーカー</label><select id="maker"><option value="">メーカーを選択（任意）</option><option>トヨタ</option><option>ホンダ</option><option>日産</option><option>スズキ</option><option>ダイハツ</option><option>マツダ</option><option>スバル</option><option>三菱</option><option>レクサス</option><option>メルセデス・ベンツ</option><option>BMW</option><option>フォルクスワーゲン</option><option>アウディ</option><option>MINI</option><option>ボルボ</option><option>ポルシェ</option><option>ジープ</option></select><div class="unit">メーカーを選ぶと車種を選択できます</div></div>
 <div class="field"><label for="model">車種</label><select id="model" disabled><option value="">先にメーカーを選択</option></select><div class="unit">車種名を選択してください</div></div>
 <div class="field"><label for="modelYear">年式（任意）</label><input id="modelYear" type="number" min="1980" max="2026" placeholder="例：2022" inputmode="numeric"><div class="unit">西暦</div></div>
 <div class="field"><label for="grade">グレード（任意）</label><input id="grade" type="text" maxlength="40" placeholder="例：Z / G / ハイブリッド"><div class="unit">分かる範囲で入力</div></div>
@@ -79,7 +79,15 @@ const models={
 "マツダ":["CX-5","CX-60","CX-30","CX-3","MAZDA2","MAZDA3","MAZDA6","ロードスター"],
 "スバル":["フォレスター","レヴォーグ","インプレッサ","クロストレック","レガシィアウトバック","WRX S4"],
 "三菱":["デリカD:5","アウトランダー","エクリプスクロス","eKクロス","eKスペース","トライトン"],
-"レクサス":["RX","NX","UX","LBX","IS","ES","LS","LM","LX","RC"]
+"レクサス":["RX","NX","UX","LBX","IS","ES","LS","LM","LX","RC"],
+"メルセデス・ベンツ":["Aクラス","Cクラス","Eクラス","Sクラス","GLA","GLB","GLC","GLE","GLS","Gクラス"],
+"BMW":["1シリーズ","2シリーズ","3シリーズ","5シリーズ","X1","X3","X5","X7","iX"],
+"フォルクスワーゲン":["ゴルフ","ポロ","T-Cross","T-Roc","ティグアン","ID.4"],
+"アウディ":["A3","A4","A6","Q2","Q3","Q5","Q7","e-tron"],
+"MINI":["3ドア","5ドア","クラブマン","クロスオーバー","カントリーマン"],
+"ボルボ":["XC40","XC60","XC90","V60","V90","S60"],
+"ポルシェ":["911","718ケイマン","718ボクスター","マカン","カイエン","タイカン"],
+"ジープ":["ラングラー","レネゲード","コンパス","グランドチェロキー"]
 };
 const maker=document.getElementById("maker"), model=document.getElementById("model");
 const vehicleDisplay=document.getElementById("vehicleDisplay"), vehicleSummary=document.getElementById("vehicleSummary");
