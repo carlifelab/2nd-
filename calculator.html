@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="車の実質コスト計算機｜購入・維持・売却費用を見える化">
 <meta property="og:description" content="車の購入価格・売却予想価格・維持費から、月々と1kmあたりの実質コストを無料でシミュレーション。">
-<meta property="og:url" content="https://carlifelab.github.io/2nd-/">
+<meta property="og:url" content="https://carlifelab.github.io/2nd-/calculator.html">
 <meta name="theme-color" content="#142b4a">
 <title>車の実質コスト計算機｜購入・維持・売却費用を無料計算</title>
 <style>
@@ -18,7 +18,7 @@
 header{background:linear-gradient(135deg,#142b4a,#244d78);color:#fff;padding:30px 18px;text-align:center}header h1{font-size:clamp(23px,5vw,30px);line-height:1.4;margin:0 0 8px}header p{margin:0;color:#dce7f5;font-size:13px}
 main{max-width:720px;margin:20px auto;padding:0 14px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:19px;margin-bottom:15px;box-shadow:0 4px 18px #172b4d0a}
 h2{font-size:19px;color:var(--navy);margin:0 0 13px}.intro{font-size:14px;color:var(--muted);margin:0 0 16px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{min-width:0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.field input{width:100%;padding:12px;border:1px solid #cbd4df;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}.unit{font-size:11px;color:var(--muted);margin-top:3px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{min-width:0}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}.field input,.field select{width:100%;padding:12px;border:1px solid #cbd4df;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}.field select:disabled{background:#f1f3f6;color:#87909e}.vehicle-display{margin:14px 0 0;padding:12px 14px;background:#f0f5fb;border-radius:9px;font-size:14px;font-weight:700;color:var(--navy)}.vehicle-summary{font-size:13px;color:var(--navy);font-weight:700;margin:0 0 10px}.unit{font-size:11px;color:var(--muted);margin-top:3px}
 button{width:100%;border:0;border-radius:10px;background:var(--blue);color:#fff;font-size:16px;font-weight:700;padding:14px;margin-top:17px;cursor:pointer}
 .result{display:none;background:#eef5ff;border:1px solid #c8dcf8;border-radius:12px;padding:16px;margin-top:16px}.result.show{display:block}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.result small{display:block;color:var(--muted);font-size:12px}.result strong{font-size:clamp(21px,5vw,27px);color:var(--navy);font-variant-numeric:tabular-nums}
 .note{font-size:12px;color:var(--muted);margin:12px 0 0}.links a{display:block;padding:12px 0;border-bottom:1px solid var(--line);color:var(--blue);text-decoration:none;font-weight:600}.links a:last-child{border-bottom:0}
@@ -33,6 +33,10 @@ footer{text-align:center;color:#87909e;font-size:11px;padding:20px}footer a{colo
 <h2>車の条件を入力</h2>
 <p class="intro">分かる範囲で入力して「実質コストを計算する」を押してください。金額は概算です。</p>
 <div class="grid">
+<div class="field"><label for="maker">メーカー</label><select id="maker"><option value="">メーカーを選択（任意）</option><option>トヨタ</option><option>ホンダ</option><option>日産</option><option>スズキ</option><option>ダイハツ</option><option>マツダ</option><option>スバル</option><option>三菱</option><option>レクサス</option></select><div class="unit">メーカーを選ぶと車種を選択できます</div></div>
+<div class="field"><label for="model">車種</label><select id="model" disabled><option value="">先にメーカーを選択</option></select><div class="unit">車種名を選択してください</div></div>
+<div class="field"><label for="modelYear">年式（任意）</label><input id="modelYear" type="number" min="1980" max="2026" placeholder="例：2022" inputmode="numeric"><div class="unit">西暦</div></div>
+<div class="field"><label for="grade">グレード（任意）</label><input id="grade" type="text" maxlength="40" placeholder="例：Z / G / ハイブリッド"><div class="unit">分かる範囲で入力</div></div>
 <div class="field"><label for="purchase">購入価格</label><input id="purchase" type="number" min="0" step="10000" value="3000000" inputmode="numeric"><div class="unit">円（諸費用込み）</div></div>
 <div class="field"><label for="resale">売却予想価格</label><input id="resale" type="number" min="0" step="10000" value="1500000" inputmode="numeric"><div class="unit">円</div></div>
 <div class="field"><label for="months">乗る期間</label><input id="months" type="number" min="1" step="1" value="60" inputmode="numeric"><div class="unit">か月</div></div>
@@ -42,16 +46,18 @@ footer{text-align:center;color:#87909e;font-size:11px;padding:20px}footer a{colo
 <div class="field"><label for="tax">年間の税金・保険料</label><input id="tax" type="number" min="0" step="1000" value="90000" inputmode="numeric"><div class="unit">円（自動車税・任意保険など）</div></div>
 <div class="field"><label for="maintenance">年間の車検・整備費</label><input id="maintenance" type="number" min="0" step="1000" value="100000" inputmode="numeric"><div class="unit">円（車検・オイル・タイヤなど）</div></div>
 </div>
+<div class="vehicle-display" id="vehicleDisplay">試算対象：車種未選択</div>
 <button type="button" id="calculate">実質コストを計算する</button>
 <div class="result" id="result" aria-live="polite">
 <h2>計算結果</h2>
+<p class="vehicle-summary" id="vehicleSummary">試算対象：車種未選択</p>
 <div class="result-grid">
 <div><small>月々の実質コスト</small><strong id="monthly">—</strong></div>
 <div><small>1kmあたりの実質コスト</small><strong id="perkm">—</strong></div>
 <div><small>乗る期間の総コスト</small><strong id="total">—</strong></div>
 <div><small>購入価格 − 売却予想価格</small><strong id="depreciation">—</strong></div>
 </div>
-<p class="note">計算式：購入価格 − 売却予想価格 ＋ 期間中の燃料・駐車場・税金保険・車検整備費。ローン金利、高速代、洗車代などは含みません。</p>
+<p class="note">計算式：購入価格 − 売却予想価格 ＋ 期間中の燃料・駐車場・税金保険・車検整備費。ローン金利、高速代、洗車代などは含みません。メーカー・車種・年式・グレードは試算対象の表示用です。車種ごとの実際の燃費・税額・査定相場を自動取得するものではありません。</p>
 </div>
 </section>
 <section class="card links">
@@ -64,6 +70,44 @@ footer{text-align:center;color:#87909e;font-size:11px;padding:20px}footer a{colo
 <script>
 (function(){
 const ids=["purchase","resale","months","distance","fuel","parking","tax","maintenance"];
+const models={
+"トヨタ":["アルファード","ヴェルファイア","プリウス","アクア","ヤリス","カローラ","ノア","ヴォクシー","ハリアー","RAV4","ランドクルーザー","クラウン","シエンタ","ルーミー","ライズ","ハイエース"],
+"ホンダ":["N-BOX","N-WGN","フィット","フリード","ステップワゴン","ヴェゼル","ZR-V","シビック","WR-V","オデッセイ"],
+"日産":["ノート","セレナ","エクストレイル","サクラ","リーフ","ルークス","エルグランド","キックス","フェアレディZ"],
+"スズキ":["スペーシア","ワゴンR","ハスラー","ジムニー","ジムニーシエラ","スイフト","ソリオ","エブリイ","アルト","クロスビー"],
+"ダイハツ":["タント","ムーヴ","タフト","ロッキー","ミライース","アトレー","トール"],
+"マツダ":["CX-5","CX-60","CX-30","CX-3","MAZDA2","MAZDA3","MAZDA6","ロードスター"],
+"スバル":["フォレスター","レヴォーグ","インプレッサ","クロストレック","レガシィアウトバック","WRX S4"],
+"三菱":["デリカD:5","アウトランダー","エクリプスクロス","eKクロス","eKスペース","トライトン"],
+"レクサス":["RX","NX","UX","LBX","IS","ES","LS","LM","LX","RC"]
+};
+const maker=document.getElementById("maker"), model=document.getElementById("model");
+const vehicleDisplay=document.getElementById("vehicleDisplay"), vehicleSummary=document.getElementById("vehicleSummary");
+function selectedVehicle(){
+ const parts=[maker.value,model.value].filter(Boolean);
+ const year=document.getElementById("modelYear").value.trim();
+ const grade=document.getElementById("grade").value.trim();
+ if(year) parts.push(year+"年式");
+ if(grade) parts.push(grade);
+ return parts.length?parts.join(" "):"車種未選択";
+}
+function updateVehicle(){
+ const label="試算対象："+selectedVehicle();
+ vehicleDisplay.textContent=label;
+ vehicleSummary.textContent=label;
+}
+maker.addEventListener("change",function(){
+ model.innerHTML="";
+ const placeholder=document.createElement("option");
+ placeholder.value="";placeholder.textContent=maker.value?"車種を選択（任意）":"先にメーカーを選択";
+ model.appendChild(placeholder);
+ (models[maker.value]||[]).forEach(name=>{const option=document.createElement("option");option.value=name;option.textContent=name;model.appendChild(option);});
+ model.disabled=!maker.value;
+ updateVehicle();
+});
+model.addEventListener("change",updateVehicle);
+document.getElementById("modelYear").addEventListener("input",updateVehicle);
+document.getElementById("grade").addEventListener("input",updateVehicle);
 const yen=n=>Math.round(n).toLocaleString("ja-JP")+"円";
 document.getElementById("calculate").addEventListener("click",function(){
  const v={}; for(const id of ids){v[id]=Number(document.getElementById(id).value);}
@@ -79,6 +123,7 @@ document.getElementById("calculate").addEventListener("click",function(){
  document.getElementById("perkm").textContent=yen(perkm);
  document.getElementById("total").textContent=yen(total);
  document.getElementById("depreciation").textContent=yen(depreciation);
+ updateVehicle();
  document.getElementById("result").classList.add("show");
 });
 })();
