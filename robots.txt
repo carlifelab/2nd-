@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://carlifelab.github.io/2nd-/sitemap.xml
