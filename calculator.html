@@ -118,9 +118,19 @@ document.getElementById("modelYear").addEventListener("input",updateVehicle);
 document.getElementById("grade").addEventListener("input",updateVehicle);
 const yen=n=>Math.round(n).toLocaleString("ja-JP")+"円";
 document.getElementById("calculate").addEventListener("click",function(){
+ const emptyIds=ids.filter(id=>document.getElementById(id).value.trim()==="");
+ if(emptyIds.length){
+  alert("未入力の項目があります。費用がかからない項目は0を入力してください。");return;
+ }
  const v={}; for(const id of ids){v[id]=Number(document.getElementById(id).value);}
- if(ids.some(id=>!Number.isFinite(v[id])||v[id]<0)||v.months<1||v.distance<1){
-  alert("各項目に0以上の数値を入力してください。乗る期間と月間走行距離は1以上にしてください。");return;
+ if(ids.some(id=>!Number.isFinite(v[id])||v[id]<0)){
+  alert("各項目には0以上の数値を入力してください。");return;
+ }
+ if(!Number.isInteger(v.months)||v.months<1){
+  alert("乗る期間は1か月以上の整数で入力してください。");return;
+ }
+ if(v.distance<1){
+  alert("月間走行距離は1km以上で入力してください。");return;
  }
  const depreciation=v.purchase-v.resale;
  const monthlyRunning=v.fuel+v.parking+(v.tax+v.maintenance)/12;
